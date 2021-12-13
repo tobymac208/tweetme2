@@ -1,0 +1,11 @@
+1. Users
+    -> Register
+    -> Login
+    -> Logout
+    -> Profile
+        -> Image
+        -> Text
+        -> Follow button?
+    -> Feed
+        -> Users only?
+        -> Users + who they follow?

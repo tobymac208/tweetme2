@@ -19,7 +19,7 @@
 
 3. Following / Followers
 
-Long term todos
+Long term todo
 - Notifications
 - DM
 - Explore - finding hashtags

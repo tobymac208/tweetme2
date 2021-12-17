@@ -11,7 +11,7 @@ Isn't she beautiful?
     Loading...
 </div>
 
-<script>
+<script type="text/javascript">
     const tweetsElement = document.getElementById('tweets');
     /* Requesting the data from the django back-end.
     It is going to grab the JSON data. */
@@ -20,8 +20,11 @@ Isn't she beautiful?
     const url = '/tweets';
     const responseType = 'json';
 
-    function formatTweetFunction(item) {
-        return `<div class='mb-4'><h1>${item.id}</h1> <p>${item.content}</p></div>`;
+    /**
+    Interpolates a list item and returns it for concatenation.
+    **/
+    function formatTweetFunction(tweet) {
+        return `<div class='mb-4 tweet' id='tweet-${tweet.id}'><p>${tweet.content}</p></div>`;
     }
 
     xhr.responseType = responseType;
@@ -30,10 +33,12 @@ Isn't she beautiful?
         const serverResponse = xhr.response;
         const listedItems = serverResponse.response;
 
+        // Create a buffered string of all list items.
         var stringBuffer = '';
-        for (let i = 0, len = listedItems.length; i < len; i++) {
+        for (let i = 0, len = listedItems.length; i < len; i++)
             stringBuffer += formatTweetFunction(listedItems[i]);
-        }
+
+        // Put our buffered string onto the page.
         tweetsElement.innerHTML = stringBuffer;
     }
     xhr.send();

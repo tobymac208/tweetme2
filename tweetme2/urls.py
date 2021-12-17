@@ -20,5 +20,5 @@ from tweets import urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(urls)),
+    path('tweet/', include(urls)),
 ]

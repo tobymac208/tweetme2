@@ -9,7 +9,7 @@ def home_view(request, *args, **kwargs):
 
 
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
-    reponse = ''
+    response = ''
 
     try:
         obj = Tweet.objects.get(id=tweet_id)

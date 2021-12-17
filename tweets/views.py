@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
 
 from .models import Tweet
@@ -15,5 +15,5 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
         obj = Tweet.objects.get(id=tweet_id)
         response = f'Details for {tweet_id} are {obj.content}'
     except:
-        response = 'not found'
+        raise Http404
     return HttpResponse(f'<h1>{response}</h1>')

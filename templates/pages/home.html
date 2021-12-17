@@ -8,7 +8,7 @@ Isn't she beautiful?
 <h1>Welcome to Tweet Me 2!</h1>
 
 <div id="tweets">
-    Replace me
+    Loading...
 </div>
 
 <script>
@@ -24,11 +24,11 @@ Isn't she beautiful?
     xhr.open(method, url);
     xhr.onload = function () {
         const serverResponse = xhr.response;
-        var listedItems = serverResponse.response;
+        const listedItems = serverResponse.response;
 
         var str = '';
         for (let i = 0, len = listedItems.length; i < len; i++) {
-            str += listedItems[i]['id'] + ' ' + listedItems[i]['content'] + '<br/>';
+            str += `${listedItems[i]['id']} ${listedItems[i]['content']} <br/>`;
         }
         tweetsElement.innerHTML = str;
     }

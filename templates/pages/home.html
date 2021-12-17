@@ -1,4 +1,25 @@
 {% extends 'base.html' %}
+
+{% block head_title %}
+Isn't she beautiful?
+{% endblock head_title %}
+
 {% block content %}
 <h1>Welcome to Tweet Me 2!</h1>
+
+<script>
+    /* Requesting the data from the django back-end.
+    It is going to grab the JSON data. */
+    const xhr = new XMLHttpRequest();
+    const method = 'GET';
+    const url = '/tweets';
+    const responseType = 'json';
+
+    xhr.responseType = responseType;
+    xhr.open(method, url);
+    xhr.onload = function () {
+        console.log(xhr.response);
+    }
+    xhr.send();
+</script>
 {% endblock content%}

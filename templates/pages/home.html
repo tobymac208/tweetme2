@@ -7,7 +7,12 @@ Isn't she beautiful?
 {% block content %}
 <h1>Welcome to Tweet Me 2!</h1>
 
+<div id="tweets">
+    Replace me
+</div>
+
 <script>
+    const tweetsElement = document.getElementById('tweets');
     /* Requesting the data from the django back-end.
     It is going to grab the JSON data. */
     const xhr = new XMLHttpRequest();
@@ -20,7 +25,12 @@ Isn't she beautiful?
     xhr.onload = function () {
         const serverResponse = xhr.response;
         var listedItems = serverResponse.response;
-        console.log(listedItems);
+
+        var str = '';
+        for (let i = 0, len = listedItems.length; i < len; i++) {
+            str += listedItems[i]['id'] + ' ' + listedItems[i]['content'] + '<br/>';
+        }
+        tweetsElement.innerHTML = str;
     }
     xhr.send();
 </script>

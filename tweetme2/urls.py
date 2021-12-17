@@ -18,7 +18,10 @@ from django.urls import path, include
 
 from tweets import urls
 
+import tweets.views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('tweet/', include(urls)),
+    path('', tweets.views.home_view),
+    path('tweet/<int:tweet_id>', tweets.views.tweet_detail_view),
 ]

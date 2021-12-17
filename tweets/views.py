@@ -1,19 +1,30 @@
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, JsonResponse
 from django.shortcuts import render
 
 from .models import Tweet
 
 
 def home_view(request, *args, **kwargs):
-    return HttpResponse("<h1>Hello, world!</h1>")
+    return render(request, 'pages/home.html', context={}, status=200)
 
 
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
-    response = ''
+    """
+    REST API VIEW
+    Reason: Allows ubiquitous consumption by JavaScript, Swift, Java, or iOS/Android, etc.
+    Return JSON data.
+    """
+
+    data = {
+        'id': tweet_id,
+    }
+
+    status = 200
 
     try:
         obj = Tweet.objects.get(id=tweet_id)
-        response = f'Details for {tweet_id} are {obj.content}'
+        data['content'] = obj.content
     except:
-        raise Http404
-    return HttpResponse(f'<h1>{response}</h1>')
+        data['message'] = 'not found'
+        status = 404
+    return JsonResponse(data, status=status)

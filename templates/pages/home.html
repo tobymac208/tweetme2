@@ -13,7 +13,7 @@ Isn't she beautiful?
 
 <div class='row mb-3'>
     <div class='col-md-4 mx-auto col-10'>
-        <form class="form" method="POST" action="/create-tweet/">
+        <form class="form" id="tweet-create-form" method="POST" action="/create-tweet/">
             {% csrf_token %}
             <input type="hidden" value="/" name="next">
             <textarea class="form-control" name="content" placeholder="Your Tweet..."></textarea>
@@ -27,42 +27,65 @@ Isn't she beautiful?
 </div>
 
 <script type="text/javascript">
-    const tweetsElement = document.getElementById('tweets');
-    /* Requesting the data from the django back-end.
-    It is going to grab the JSON data. */
-    const xhr = new XMLHttpRequest();
-    const method = 'GET';
-    const url = '/tweets';
-    const responseType = 'json';
+    // Handle the submission of a new tweet. The code below will only reload the tweets.
+    let handleTweetCreateFormDidSubmit = function (event) {
+        event.preventDefault();
+        const myForm = event.target;
+        const myFormData = new FormData(myForm);
+        const url = myForm.getAttribute('action');
+        const method = myForm.getAttribute('method');
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.onload = function () {
+            const serverResponse = xhr.response;
+            console.log(serverResponse);
+        }
+        xhr.send(myFormData);
+    }
+    const tweetCreateFormEl = document.getElementById('tweet-create-form');
+    // Ask the page to listen for someone hitting a submit button.
+    tweetCreateFormEl.addEventListener('submit', handleDidSubmit);
 
-    function handleDidLike(tweet_id, currentCount) {
+    const tweetsEl = document.getElementById('tweets');
+    let loadTweets = function (tweetsElement) {
+        /* Requesting the data from the django back-end.
+        It is going to grab the JSON data. */
+        const xhr = new XMLHttpRequest();
+        const method = 'GET';
+        const url = '/tweets';
+        const responseType = 'json';
+        xhr.responseType = responseType;
+        xhr.open(method, url);
+        xhr.onload = function () {
+            const serverResponse = xhr.response;
+            const listedItems = serverResponse.response;
+
+            // Create a buffered string of all list items.
+            var stringBuffer = '';
+            for (let i = 0, len = listedItems.length; i < len; i++)
+                stringBuffer += formatTweetFunction(listedItems[i]);
+
+            // Put our buffered string onto the page.
+            tweetsElement.innerHTML = stringBuffer;
+        }
+        xhr.send();
+    }
+
+    // Load the tweets in the tweets element
+    loadTweets(tweetsEl);
+
+    let handleDidLike = function (tweet_id, currentCount) {
         console.log(tweet_id, currentCount);
     }
 
-    function LikeBtn(tweet) {
+    let LikeBtn = function (tweet) {
         return `<button class='btn btn-primary' onclick=handleDidLike(${tweet.id},${tweet.likes})>${tweet.likes} Like</button>`;
     }
     /**
     Interpolates a list item and returns it for concatenation.
     **/
-    function formatTweetFunction(tweet) {
+    let formatTweetFunction = function (tweet) {
         return `<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet-${tweet.id}'><p>${tweet.content}</p> <div class="btn-group">${LikeBtn(tweet)}</div></div>`;
     }
-
-    xhr.responseType = responseType;
-    xhr.open(method, url);
-    xhr.onload = function () {
-        const serverResponse = xhr.response;
-        const listedItems = serverResponse.response;
-
-        // Create a buffered string of all list items.
-        var stringBuffer = '';
-        for (let i = 0, len = listedItems.length; i < len; i++)
-            stringBuffer += formatTweetFunction(listedItems[i]);
-
-        // Put our buffered string onto the page.
-        tweetsElement.innerHTML = stringBuffer;
-    }
-    xhr.send();
 </script>
 {% endblock content%}

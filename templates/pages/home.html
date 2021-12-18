@@ -5,9 +5,13 @@ Isn't she beautiful?
 {% endblock head_title %}
 
 {% block content %}
-<h1>Welcome to Tweet Me 2!</h1>
+<div class="row text-center">
+    <div class="col">
+        <h1>Welcome to Tweet Me 2!</h1>
+    </div>
+</div>
 
-<div id="tweets">
+<div class="row" id="tweets">
     Loading...
 </div>
 
@@ -20,11 +24,18 @@ Isn't she beautiful?
     const url = '/tweets';
     const responseType = 'json';
 
+    function handleDidLike(tweet_id, currentCount) {
+        console.log(tweet_id, currentCount);
+    }
+
+    function LikeBtn(tweet) {
+        return `<button class='btn btn-primary' onclick=handleDidLike(${tweet.id},${tweet.likes})>${tweet.likes} Like</button>`;
+    }
     /**
     Interpolates a list item and returns it for concatenation.
     **/
     function formatTweetFunction(tweet) {
-        return `<div class='mb-4 tweet' id='tweet-${tweet.id}'><p>${tweet.content}</p></div>`;
+        return `<div class='col-12 border py-3 mb-4 tweet' id='tweet-${tweet.id}'><p>${tweet.content}</p> <div class="btn-group">${LikeBtn(tweet)}</div></div>`;
     }
 
     xhr.responseType = responseType;

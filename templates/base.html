@@ -14,8 +14,11 @@
 </head>
 
 <body>
-    {% block content %}
-    {% endblock content %}
+    {% include "components/navbar.html" %}
+    <div class="container-fluid">
+        {% block content %}
+        {% endblock content %}
+    </div>
 
     <!-- Optional JavaScript; choose one of the two! -->
 

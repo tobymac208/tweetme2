@@ -11,6 +11,17 @@ Isn't she beautiful?
     </div>
 </div>
 
+<div class='row mb-3'>
+    <div class='col-md-4 mx-auto col-10'>
+        <form class="form" method="POST" action="/create-tweet/">
+            {% csrf_token %}
+            <input type="hidden" value="/" name="next">
+            <textarea class="form-control" name="content" placeholder="Your Tweet..."></textarea>
+            <button type="submit" class="btn btn-primary">Tweet</button>
+        </form>
+    </div>
+</div>
+
 <div class="row" id="tweets">
     Loading...
 </div>
@@ -35,7 +46,7 @@ Isn't she beautiful?
     Interpolates a list item and returns it for concatenation.
     **/
     function formatTweetFunction(tweet) {
-        return `<div class='col-12 border-top border-bottom py-3 mb-4 tweet' id='tweet-${tweet.id}'><p>${tweet.content}</p> <div class="btn-group">${LikeBtn(tweet)}</div></div>`;
+        return `<div class='col-12 col-md-10 mx-auto border rounded py-3 mb-4 tweet' id='tweet-${tweet.id}'><p>${tweet.content}</p> <div class="btn-group">${LikeBtn(tweet)}</div></div>`;
     }
 
     xhr.responseType = responseType;

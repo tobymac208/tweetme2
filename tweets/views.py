@@ -16,12 +16,21 @@ def home_view(request, *args, **kwargs):
 
 
 def tweet_create_view(request, *args, **kwargs):
+    user = request.user
+    # Verify the user has logged in.
+    if not request.user.is_authenticated:
+        # since AnonymousUser is authenticated.
+        user = None
+        if request.is_ajax():
+            return JsonResponse({}, status=401)
+        return redirect(settings.LOGIN_URL)
     form = TweetForm(request.POST or None)
     # grab the desired location from the form
     next_url = request.POST.get('next') or None
     if form.is_valid():
         obj = form.save(commit=False)
         # save data to our database
+        obj.user = user
         obj.save()
         # AJAX response! #
         if request.is_ajax():

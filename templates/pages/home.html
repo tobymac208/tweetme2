@@ -29,11 +29,13 @@ Tweets
 </div>
 
 <script type="text/javascript">
+    var myErrorDiv = document.getElementById('tweet-create-form-error');
     function handleTweetCreateFormError(msg, display) {
         if (display === true) {
-            // show error
+            myErrorDiv.setAttribute('class', 'alert alert-danger');
+            myErrorDiv.innerHTML = msg;
         } else {
-            // hide error
+            myErrorDiv.setAttribute('class', 'd-none alert alert-danger');
         }
     }
 
@@ -60,6 +62,7 @@ Tweets
 
         xhr.onload = function () {
             if (xhr.status === 201) {
+                handleTweetCreateFormError('', false);
                 const newTweetJson = xhr.response;
                 const newTweetElement = formatTweetFunction(newTweetJson);
                 const ogHtml = tweetsContainerElement.innerHTML;
@@ -72,11 +75,18 @@ Tweets
                 let contentErrorMsg;
                 if (contentError) {
                     contentErrorMsg = contentError[0];
+                    if (contentErrorMsg) {
+                        handleTweetCreateFormError(contentErrorMsg, true);
+                    } else {
+                        alert('An error occurred. Please try again.');
+                    }
                 } else {
                     alert('Error occurred. Please try again.');
                 }
                 console.log(contentErrorMsg);
-            }/* Server error occurred. */ else if (xhr.status === 500) {
+            } else if (xhr.status === 401) { // The user needs to login.
+                alert('You must login!');
+            } else if (xhr.status === 500) {
                 alert('There was a server error. Please try again.');
             }
         }
